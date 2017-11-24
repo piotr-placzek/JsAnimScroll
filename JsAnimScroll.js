@@ -28,14 +28,18 @@ var JsAnimScroll = /** @class */ (function () {
             return this.__obj;
         };
         this.__timeIncrementation = incrementation;
+        this.__obj = window;
     }
     JsAnimScroll.prototype.setScrollObjectById = function (id) {
         this.__obj = document.getElementById(id);
     };
-    JsAnimScroll.prototype.scroll = function (topx, duration, element) {
-        if (element === void 0) { element = this.__obj; }
-        this.__obj = element;
-        this.__startPosition = element.scrollTop;
+    JsAnimScroll.prototype.scroll = function (topx, duration) {
+        if (this.__obj != window) {
+            this.__startPosition = this.__obj.scrollTop;
+        }
+        else {
+            this.__startPosition = window.scrollY;
+        }
         this.__pxDiff = topx - this.__startPosition;
         this.__timeDuration = duration;
         this.__currentTime = 0;
@@ -45,7 +49,12 @@ var JsAnimScroll = /** @class */ (function () {
         var _this = this;
         this.__currentTime += this.__timeIncrementation;
         var newScrollTopValue = this.easeInOutQuad();
-        this.__obj.scrollTop = newScrollTopValue;
+        if (this.__obj != window) {
+            this.__obj.scrollTop = newScrollTopValue;
+        }
+        else {
+            this.__obj.scrollTo(0, newScrollTopValue);
+        }
         if (this.__currentTime < this.__timeDuration) {
             this.__timer = setTimeout(function () { return _this.execute(); }, this.__timeIncrementation);
         }
