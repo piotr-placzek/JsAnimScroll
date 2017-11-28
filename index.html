@@ -1,36 +1,41 @@
 <!doctype html>
 
 <html>
-	<head>
-		<title>Page Title</title>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="initial-scale=1.0">
-		<link rel="stylesheet" type="text/css" href="style.css" />
-		<script type="text/javascript" src="JsAnimScroll.js"></script>
-		
-	</head>
 
-	<body id="scrollThis">
-	    <button onclick="jsAnimScroll.scroll(1000,3000);">onclick="jsAnimScroll.scroll(1000,3000,document.getElementById('scrollThis'));"</button>
-<!--	    <div id="scrollThis">-->
-	        <div class="color t1"></div>
-	        <div class="color t2"></div>
-	        <div class="color t3"></div>
-	        <div class="color t1"></div>
-	        <div class="color t2"></div>
-	        <div class="color t3"></div>
-	        <div class="color t1"></div>
-	        <div class="color t2"></div>
-	        <div class="color t3"></div>
-	        <div class="color t1"></div>
-	        <div class="color t2"></div>
-	        <div class="color t3"></div>
-	        <div class="color t1"></div>
-	        <div class="color t2"></div>
-	        <div class="color t3"></div>
-<!--	    </div>-->
-<script>
-//            jsAnimScroll.setScrollObjectById('scrollThis');
-        </script>
-	</body>
+<head>
+    <title>Page Title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script type="text/javascript" src="JsAnimScroll.js"></script>
+    <script type="text/javascript" src="JsAnimScrollv2.js"></script>
+
+</head>
+
+<body id="scrollThis">
+    <button onclick="ASD()">ASD</button>
+    <!--	    <div id="scrollThis">-->
+    <div class="color t1"></div>
+    <div class="color t2"></div>
+    <div class="color t3"></div>
+    <div class="color t1"></div>
+    <div class="color t2"></div>
+    <div class="color t3"></div>
+    <div class="color t1"></div>
+    <div class="color t2"></div>
+    <div class="color t3"></div>
+    <div class="color t1"></div>
+    <div class="color t2"></div>
+    <div class="color t3"></div>
+    <div class="color t1"></div>
+    <div class="color t2"></div>
+    <div class="color t3"></div>
+    <!--	    </div>-->
+    <script>
+        function ASD() {
+            jsAnimScrollv2.easeInOutQuad(window, 1750, 3000);
+        }
+    </script>
+</body>
+
 </html>
