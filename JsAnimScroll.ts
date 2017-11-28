@@ -19,6 +19,24 @@ class JsAnimScroll{
             elementToScroll.scrollTo(0,y);
         }
     }
+	public linear(elementToScroll: any, scrollTo: number, scrollDuration: number): void{
+		let parent: any = this;
+        let scrollFrom: number = parent.getScrollFrom(elementToScroll);
+        let pixelsToScroll: number = scrollTo - scrollFrom;
+        let dt = 0;
+        let calc = function(t, b, c, d){
+			return (t/parent.ts())*((c*parent.ts())/d)+b;
+        }
+        let exec = function(){
+            dt += parent.ts();
+            let y = calc(dt, scrollFrom, pixelsToScroll, scrollDuration);
+            parent.setScrollPos(elementToScroll, y);
+            if(dt<scrollDuration){
+                setTimeout(exec,parent.ts());
+            }
+        }
+        exec();
+    }
     public easeInOutQuad(elementToScroll: any, scrollTo: number, scrollDuration: number): void{
 		let parent: any = this;
         let scrollFrom: number = parent.getScrollFrom(elementToScroll);

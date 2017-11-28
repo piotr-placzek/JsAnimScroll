@@ -20,6 +20,24 @@ var JsAnimScroll = /** @class */ (function () {
             elementToScroll.scrollTo(0, y);
         }
     };
+    JsAnimScroll.prototype.linear = function (elementToScroll, scrollTo, scrollDuration) {
+        var parent = this;
+        var scrollFrom = parent.getScrollFrom(elementToScroll);
+        var pixelsToScroll = scrollTo - scrollFrom;
+        var dt = 0;
+        var calc = function (t, b, c, d) {
+            return (t / parent.ts()) * ((c * parent.ts()) / d) + b;
+        };
+        var exec = function () {
+            dt += parent.ts();
+            var y = calc(dt, scrollFrom, pixelsToScroll, scrollDuration);
+            parent.setScrollPos(elementToScroll, y);
+            if (dt < scrollDuration) {
+                setTimeout(exec, parent.ts());
+            }
+        };
+        exec();
+    };
     JsAnimScroll.prototype.easeInOutQuad = function (elementToScroll, scrollTo, scrollDuration) {
         var parent = this;
         var scrollFrom = parent.getScrollFrom(elementToScroll);
