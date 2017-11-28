@@ -1,8 +1,19 @@
 var JsAnimScroll = /** @class */ (function () {
     function JsAnimScroll() {
+        this.__gds__ = 20;
+        this.__gsd__ = 3000;
     }
-    JsAnimScroll.prototype.ts = function () {
-        return 20;
+    JsAnimScroll.prototype.globalDurationStep = function () {
+        return this.__gds__;
+    };
+    JsAnimScroll.prototype.globalScrollDuration = function () {
+        return this.__gsd__;
+    };
+    JsAnimScroll.prototype.setGlobalDurationStep = function (val) {
+        this.__gds__ = val;
+    };
+    JsAnimScroll.prototype.setGlobalScrollDuration = function (val) {
+        this.__gsd__ = val;
     };
     JsAnimScroll.prototype.getScrollFrom = function (elementToScroll) {
         if (elementToScroll != window) {
@@ -20,7 +31,9 @@ var JsAnimScroll = /** @class */ (function () {
             elementToScroll.scrollTo(0, y);
         }
     };
-    JsAnimScroll.prototype.linear = function (elementToScroll, scrollTo, scrollDuration) {
+    JsAnimScroll.prototype.linear = function (elementToScroll, scrollTo, scrollDuration, durationStep) {
+        if (scrollDuration === void 0) { scrollDuration = this.globalScrollDuration(); }
+        if (durationStep === void 0) { durationStep = this.globalDurationStep(); }
         var parent = this;
         var scrollFrom = parent.getScrollFrom(elementToScroll);
         var pixelsToScroll = scrollTo - scrollFrom;
@@ -29,16 +42,18 @@ var JsAnimScroll = /** @class */ (function () {
             return (t / parent.ts()) * ((c * parent.ts()) / d) + b;
         };
         var exec = function () {
-            dt += parent.ts();
+            dt += durationStep;
             var y = calc(dt, scrollFrom, pixelsToScroll, scrollDuration);
             parent.setScrollPos(elementToScroll, y);
             if (dt < scrollDuration) {
-                setTimeout(exec, parent.ts());
+                setTimeout(exec, durationStep);
             }
         };
         exec();
     };
-    JsAnimScroll.prototype.easeInOutQuad = function (elementToScroll, scrollTo, scrollDuration) {
+    JsAnimScroll.prototype.easeInOutQuad = function (elementToScroll, scrollTo, scrollDuration, durationStep) {
+        if (scrollDuration === void 0) { scrollDuration = this.globalScrollDuration(); }
+        if (durationStep === void 0) { durationStep = this.globalDurationStep(); }
         var parent = this;
         var scrollFrom = parent.getScrollFrom(elementToScroll);
         var pixelsToScroll = scrollTo - scrollFrom;
@@ -54,11 +69,11 @@ var JsAnimScroll = /** @class */ (function () {
             }
         };
         var exec = function () {
-            dt += parent.ts();
+            dt += durationStep;
             var y = calc(dt, scrollFrom, pixelsToScroll, scrollDuration);
             parent.setScrollPos(elementToScroll, y);
             if (dt < scrollDuration) {
-                setTimeout(exec, parent.ts());
+                setTimeout(exec, durationStep);
             }
         };
         exec();

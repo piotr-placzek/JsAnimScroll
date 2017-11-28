@@ -1,6 +1,17 @@
 class JsAnimScroll{
-   private ts() :number{
-       return 20;
+	private __gds__ :number = 20;
+	private __gsd__ :number = 3000;
+   public globalDurationStep() :number{
+       return this.__gds__;
+   }
+   public globalScrollDuration() :number{
+	   return this.__gsd__;
+   }
+   public setGlobalDurationStep(val: number){
+	   this.__gds__ = val;
+   }
+   public setGlobalScrollDuration(val: number){
+	   this.__gsd__ = val;
    }
    private getScrollFrom(elementToScroll: any): number{
          if(elementToScroll != window){
@@ -19,7 +30,7 @@ class JsAnimScroll{
             elementToScroll.scrollTo(0,y);
         }
     }
-	public linear(elementToScroll: any, scrollTo: number, scrollDuration: number): void{
+	public linear(elementToScroll: any, scrollTo: number, scrollDuration: number = this.globalScrollDuration(), durationStep: number = this.globalDurationStep()): void{
 		let parent: any = this;
         let scrollFrom: number = parent.getScrollFrom(elementToScroll);
         let pixelsToScroll: number = scrollTo - scrollFrom;
@@ -28,16 +39,16 @@ class JsAnimScroll{
 			return (t/parent.ts())*((c*parent.ts())/d)+b;
         }
         let exec = function(){
-            dt += parent.ts();
+            dt += durationStep;
             let y = calc(dt, scrollFrom, pixelsToScroll, scrollDuration);
             parent.setScrollPos(elementToScroll, y);
             if(dt<scrollDuration){
-                setTimeout(exec,parent.ts());
+                setTimeout(exec,durationStep);
             }
         }
         exec();
     }
-    public easeInOutQuad(elementToScroll: any, scrollTo: number, scrollDuration: number): void{
+    public easeInOutQuad(elementToScroll: any, scrollTo: number, scrollDuration: number = this.globalScrollDuration(), durationStep: number = this.globalDurationStep()): void{
 		let parent: any = this;
         let scrollFrom: number = parent.getScrollFrom(elementToScroll);
         let pixelsToScroll: number = scrollTo - scrollFrom;
@@ -53,11 +64,11 @@ class JsAnimScroll{
             }
         }
         let exec = function(){
-            dt += parent.ts();
+            dt += durationStep;
             let y = calc(dt, scrollFrom, pixelsToScroll, scrollDuration);
             parent.setScrollPos(elementToScroll, y);
             if(dt<scrollDuration){
-                setTimeout(exec,parent.ts());
+                setTimeout(exec,durationStep);
             }
         }
         exec();
