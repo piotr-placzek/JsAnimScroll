@@ -59,23 +59,31 @@ class JsAnimScroll{
             }
         }
 	}
+    private exec(elementToScroll: any, bezierPoints, dt:number, durationStep: number, scrollDuration: number, pixelsToScroll: number, scrollFrom: number){
+        dt += durationStep;
+        let y = pixelsToScroll*this.cubic_bezier_multiplicator(bezierPoints, dt ,scrollDuration)+scrollFrom;
+        this.setScrollPos(elementToScroll, y);
+        let parent = this;
+        if(dt<scrollDuration){
+            setTimeout(function(){parent.exec(elementToScroll, bezierPoints, dt, durationStep, scrollDuration, pixelsToScroll, scrollFrom);},durationStep);
+        }
+    }
 	public linear(elementToScroll: any, scrollTo: number, scrollDuration: number = this.globalScrollDuration(), durationStep: number = this.globalDurationStep()): void{
 		let parent: any = this;
         let scrollFrom: number = parent.getScrollFrom(elementToScroll);
         let pixelsToScroll: number = scrollTo - scrollFrom;
         let dt = 0;
         let bezierPoints = parent.cubic_bezier(0,0,1,1);
-        console.log(bezierPoints);
-
-        let exec = function(){
-            dt += durationStep;
-            let y = pixelsToScroll*parent.cubic_bezier_multiplicator(bezierPoints, dt,scrollDuration)+scrollFrom;
-            parent.setScrollPos(elementToScroll, y);
-            if(dt<scrollDuration){
-                setTimeout(exec,durationStep);
-            }
-        }
-        exec();
+//        let exec = function(){
+//            dt += durationStep;
+//            let y = pixelsToScroll*parent.cubic_bezier_multiplicator(bezierPoints, dt,scrollDuration)+scrollFrom;
+//            parent.setScrollPos(elementToScroll, y);
+//            if(dt<scrollDuration){
+//                setTimeout(exec,durationStep);
+//            }
+//        }
+//        exec();
+        parent.exec(elementToScroll, bezierPoints, 0, durationStep, scrollDuration, pixelsToScroll, scrollFrom);
     }
     public easeInOutQuad(elementToScroll: any, scrollTo: number, scrollDuration: number = this.globalScrollDuration(), durationStep: number = this.globalDurationStep()): void{
 
