@@ -64,12 +64,9 @@ class JsAnimScroll{
         let scrollFrom: number = parent.getScrollFrom(elementToScroll);
         let pixelsToScroll: number = scrollTo - scrollFrom;
         let dt = 0;
-//        let bezierPoints = parent.cubic_bezier(0,0,1,1);
-        let bezierPoints = parent.cubic_bezier(0.455,0.03,0.515,0.955);
+        let bezierPoints = parent.cubic_bezier(0,0,1,1);
         console.log(bezierPoints);
-//        let calc = function(t, b, c, d){
-//			return (t/parent.ts())*((c*parent.ts())/d)+b;
-//        }
+
         let exec = function(){
             dt += durationStep;
             let y = pixelsToScroll*parent.cubic_bezier_multiplicator(bezierPoints, dt,scrollDuration)+scrollFrom;
@@ -81,26 +78,14 @@ class JsAnimScroll{
         exec();
     }
     public easeInOutQuad(elementToScroll: any, scrollTo: number, scrollDuration: number = this.globalScrollDuration(), durationStep: number = this.globalDurationStep()): void{
-//		cubic-bezier(0.455, 0.03, 0.515, 0.955);	easeInOutQuad
-//		cubic-bezier(0.68, -0.55, 0.265, 1.55);		easeInOutBack
+
 		let parent: any = this;
         let scrollFrom: number = parent.getScrollFrom(elementToScroll);
         let pixelsToScroll: number = scrollTo - scrollFrom;
         let dt = 0;
         let bezierPoints = parent.cubic_bezier(0.455,0.03,0.515,0.955);
-//        let calc = function(t, b, c, d){
-//            t /= d/2;
-//            if (t < 1){
-//                return c/2*t*t + b;
-//            }
-//            else{
-//                t--;
-//                return -c/2 * (t*(t-2) - 1) + b;
-//            }
-//        }
         let exec = function(){
             dt += durationStep;
-//            let y = calc(dt, scrollFrom, pixelsToScroll, scrollDuration);
             let y = pixelsToScroll*parent.cubic_bezier_multiplicator(bezierPoints, dt,scrollDuration)+scrollFrom;
             parent.setScrollPos(elementToScroll, y);
             if(dt<scrollDuration){
