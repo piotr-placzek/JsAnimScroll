@@ -72,20 +72,8 @@ var JsAnimScroll = /** @class */ (function () {
         if (scrollDuration === void 0) { scrollDuration = this.globalScrollDuration(); }
         if (durationStep === void 0) { durationStep = this.globalDurationStep(); }
         var parent = this;
-        var scrollFrom = parent.getScrollFrom(elementToScroll);
-        var pixelsToScroll = scrollTo - scrollFrom;
-        var dt = 0;
         var bezierPoints = parent.cubic_bezier(0, 0, 1, 1);
-        //        let exec = function(){
-        //            dt += durationStep;
-        //            let y = pixelsToScroll*parent.cubic_bezier_multiplicator(bezierPoints, dt,scrollDuration)+scrollFrom;
-        //            parent.setScrollPos(elementToScroll, y);
-        //            if(dt<scrollDuration){
-        //                setTimeout(exec,durationStep);
-        //            }
-        //        }
-        //        exec();
-        parent.exec(elementToScroll, bezierPoints, 0, durationStep, scrollDuration, pixelsToScroll, scrollFrom);
+        parent.exec(elementToScroll, bezierPoints, 0, durationStep, scrollDuration, (scrollTo - parent.getScrollFrom(elementToScroll)), parent.getScrollFrom(elementToScroll));
     };
     JsAnimScroll.prototype.easeInOutQuad = function (elementToScroll, scrollTo, scrollDuration, durationStep) {
         if (scrollDuration === void 0) { scrollDuration = this.globalScrollDuration(); }
