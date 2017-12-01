@@ -74,21 +74,9 @@ class JsAnimScroll{
         parent.exec(elementToScroll, bezierPoints, 0, durationStep, scrollDuration, (scrollTo - parent.getScrollFrom(elementToScroll)), parent.getScrollFrom(elementToScroll));
     }
     public easeInOutQuad(elementToScroll: any, scrollTo: number, scrollDuration: number = this.globalScrollDuration(), durationStep: number = this.globalDurationStep()): void{
-
 		let parent: any = this;
-        let scrollFrom: number = parent.getScrollFrom(elementToScroll);
-        let pixelsToScroll: number = scrollTo - scrollFrom;
-        let dt = 0;
         let bezierPoints = parent.cubic_bezier(0.455,0.03,0.515,0.955);
-        let exec = function(){
-            dt += durationStep;
-            let y = pixelsToScroll*parent.cubic_bezier_multiplicator(bezierPoints, dt,scrollDuration)+scrollFrom;
-            parent.setScrollPos(elementToScroll, y);
-            if(dt<scrollDuration){
-                setTimeout(exec,durationStep);
-            }
-        }
-        exec();
+        parent.exec(elementToScroll, bezierPoints, 0, durationStep, scrollDuration, (scrollTo - parent.getScrollFrom(elementToScroll)), parent.getScrollFrom(elementToScroll));
     }
 }
 var jsAnimScroll = new JsAnimScroll;
