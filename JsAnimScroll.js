@@ -31,29 +31,34 @@ var JsAnimScroll = /** @class */ (function () {
             elementToScroll.scrollTo(0, y);
         }
     };
-    JsAnimScroll.prototype.cubic_bezier = function (B, C, dt) {
+    JsAnimScroll.prototype.cubic_bezier = function (bx, by, cx, cy, dt) {
         if (dt === void 0) { dt = 0.01; }
-        var result;
-        var _i = 0;
-        for (var _t = 0; _t <= 1; _t += dt) {
-            var _p = void 0;
-            _p.x = 0;
-            _p.y = 0;
-            _p.t = _t;
-            _p.dt = dt;
-            _p.z = 0;
-            result[_i] = _p;
-            _i++;
+        var result = [];
+        for (var t = 0; t <= (1 + dt); t += dt) {
+            var x = 3 * bx * t * (1 - 2 * t + t * t) + 3 * cx * t * t * (1 - t) + t * t * t;
+            var y = 3 * by * t * (1 - 2 * t + t * t) + 3 * cy * t * t * (1 - t) + t * t * t;
+            var _p = [x, y];
+            result.push(_p);
         }
         return result;
     };
     JsAnimScroll.prototype.cubic_bezier_multiplicator = function (points, ct, sd) {
-        return 0;
+        var temp = 0;
+        var x = ct / sd;
+        for (var i = 0; i < points.length; i++) {
+            if (points[i][0] < x) {
+                temp = points[i][0];
+            }
+            else {
+                if ((points[i][0] - x) < (x - temp)) {
+                    return points[i][1];
+                }
+                else {
+                    return points[i - 1][1];
+                }
+            }
+        }
     };
-    //	private cubic_bezier_multiplier(B: number, C: number, ct: number, dt: number): number{
-    //		const t = ct/dt;
-    //		return 3*B*t*(1-2*t+t*t)+3*C*t*t*(1-t)+t*t*t;
-    //	}
     JsAnimScroll.prototype.linear = function (elementToScroll, scrollTo, scrollDuration, durationStep) {
         if (scrollDuration === void 0) { scrollDuration = this.globalScrollDuration(); }
         if (durationStep === void 0) { durationStep = this.globalDurationStep(); }
@@ -61,13 +66,15 @@ var JsAnimScroll = /** @class */ (function () {
         var scrollFrom = parent.getScrollFrom(elementToScroll);
         var pixelsToScroll = scrollTo - scrollFrom;
         var dt = 0;
-        var calc = function (t, b, c, d) {
-            return (t / parent.ts()) * ((c * parent.ts()) / d) + b;
-        };
+        //        let bezierPoints = parent.cubic_bezier(0,0,1,1);
+        var bezierPoints = parent.cubic_bezier(0.455, 0.03, 0.515, 0.955);
+        console.log(bezierPoints);
+        //        let calc = function(t, b, c, d){
+        //			return (t/parent.ts())*((c*parent.ts())/d)+b;
+        //        }
         var exec = function () {
             dt += durationStep;
-            //            let y = calc(dt, scrollFrom, pixelsToScroll, scrollDuration);
-            var y = pixelsToScroll * parent.cubic_bezier_multiplier(0, 1, dt, scrollDuration) + scrollFrom;
+            var y = pixelsToScroll * parent.cubic_bezier_multiplicator(bezierPoints, dt, scrollDuration) + scrollFrom;
             parent.setScrollPos(elementToScroll, y);
             if (dt < scrollDuration) {
                 setTimeout(exec, durationStep);
@@ -84,19 +91,21 @@ var JsAnimScroll = /** @class */ (function () {
         var scrollFrom = parent.getScrollFrom(elementToScroll);
         var pixelsToScroll = scrollTo - scrollFrom;
         var dt = 0;
-        var calc = function (t, b, c, d) {
-            t /= d / 2;
-            if (t < 1) {
-                return c / 2 * t * t + b;
-            }
-            else {
-                t--;
-                return -c / 2 * (t * (t - 2) - 1) + b;
-            }
-        };
+        var bezierPoints = parent.cubic_bezier(0.455, 0.03, 0.515, 0.955);
+        //        let calc = function(t, b, c, d){
+        //            t /= d/2;
+        //            if (t < 1){
+        //                return c/2*t*t + b;
+        //            }
+        //            else{
+        //                t--;
+        //                return -c/2 * (t*(t-2) - 1) + b;
+        //            }
+        //        }
         var exec = function () {
             dt += durationStep;
-            var y = calc(dt, scrollFrom, pixelsToScroll, scrollDuration);
+            //            let y = calc(dt, scrollFrom, pixelsToScroll, scrollDuration);
+            var y = pixelsToScroll * parent.cubic_bezier_multiplicator(bezierPoints, dt, scrollDuration) + scrollFrom;
             parent.setScrollPos(elementToScroll, y);
             if (dt < scrollDuration) {
                 setTimeout(exec, durationStep);

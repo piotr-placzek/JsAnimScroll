@@ -1,11 +1,3 @@
-interface Point {
-    x: number;
-	y: number;
-	z: number;
-	t: number;
-	dt: number;
-}
-
 class JsAnimScroll{
 	private __gds__ :number = 20;
 	private __gsd__ :number = 3000;
@@ -40,41 +32,47 @@ class JsAnimScroll{
             elementToScroll.scrollTo(0,y);
         }
     }
-	private cubic_bezier(B: Point, C: Point, dt: number = 0.01): Point[]{
-		let result: Point[];
-		let _i=0;
-		for(let _t=0; _t<=1; _t+=dt){
-			let _p: Point;
-			_p.x = 0;
-			_p.y = 0;
-			_p.t = _t;
-			_p.dt = dt;
-			_p.z = 0;
-			result[_i] = _p;
-			_i++;
-		}
-		return result;
+	private cubic_bezier(bx: number, by: number, cx: number, cy: number, dt: number = 0.01){
+        let result = [];	
+        for (let t = 0; t <= (1+dt); t += dt) {
+            let x = 3*bx*t*(1-2*t+t*t)+3*cx*t*t*(1-t)+t*t*t;
+            let y = 3*by*t*(1-2*t+t*t)+3*cy*t*t*(1-t)+t*t*t;
+            let _p = [x,y];
+            result.push(_p);
+        }
+        return result;
 	}
-	private cubic_bezier_multiplicator(points: Point[], ct: number, sd: number): number{
-		return 0;
+	private cubic_bezier_multiplicator(points, ct: number, sd: number): number{
+        let temp = 0;
+        const x = ct/sd;
+        for(let i=0; i<points.length; i++){
+            if(points[i][0]<x){
+                temp = points[i][0];
+            }
+            else{
+                if((points[i][0]-x)<(x-temp)){
+                    return points[i][1];
+                }
+                else{
+                    return points[i-1][1];
+                }
+            }
+        }
 	}
-//	private cubic_bezier_multiplier(B: number, C: number, ct: number, dt: number): number{
-//		const t = ct/dt;
-//		return 3*B*t*(1-2*t+t*t)+3*C*t*t*(1-t)+t*t*t;
-//	}
 	public linear(elementToScroll: any, scrollTo: number, scrollDuration: number = this.globalScrollDuration(), durationStep: number = this.globalDurationStep()): void{
 		let parent: any = this;
         let scrollFrom: number = parent.getScrollFrom(elementToScroll);
         let pixelsToScroll: number = scrollTo - scrollFrom;
         let dt = 0;
-        let calc = function(t, b, c, d){
-			return (t/parent.ts())*((c*parent.ts())/d)+b;
-        }
+//        let bezierPoints = parent.cubic_bezier(0,0,1,1);
+        let bezierPoints = parent.cubic_bezier(0.455,0.03,0.515,0.955);
+        console.log(bezierPoints);
+//        let calc = function(t, b, c, d){
+//			return (t/parent.ts())*((c*parent.ts())/d)+b;
+//        }
         let exec = function(){
             dt += durationStep;
-//            let y = calc(dt, scrollFrom, pixelsToScroll, scrollDuration);
-//			  let y = pixelsToScroll*parent.cubic_bezier_multiplier(0,1,dt,scrollDuration)+scrollFrom;
-			let y = 1;
+            let y = pixelsToScroll*parent.cubic_bezier_multiplicator(bezierPoints, dt,scrollDuration)+scrollFrom;
             parent.setScrollPos(elementToScroll, y);
             if(dt<scrollDuration){
                 setTimeout(exec,durationStep);
@@ -89,19 +87,21 @@ class JsAnimScroll{
         let scrollFrom: number = parent.getScrollFrom(elementToScroll);
         let pixelsToScroll: number = scrollTo - scrollFrom;
         let dt = 0;
-        let calc = function(t, b, c, d){
-            t /= d/2;
-            if (t < 1){
-                return c/2*t*t + b;
-            }
-            else{
-                t--;
-                return -c/2 * (t*(t-2) - 1) + b;
-            }
-        }
+        let bezierPoints = parent.cubic_bezier(0.455,0.03,0.515,0.955);
+//        let calc = function(t, b, c, d){
+//            t /= d/2;
+//            if (t < 1){
+//                return c/2*t*t + b;
+//            }
+//            else{
+//                t--;
+//                return -c/2 * (t*(t-2) - 1) + b;
+//            }
+//        }
         let exec = function(){
             dt += durationStep;
-            let y = calc(dt, scrollFrom, pixelsToScroll, scrollDuration);
+//            let y = calc(dt, scrollFrom, pixelsToScroll, scrollDuration);
+            let y = pixelsToScroll*parent.cubic_bezier_multiplicator(bezierPoints, dt,scrollDuration)+scrollFrom;
             parent.setScrollPos(elementToScroll, y);
             if(dt<scrollDuration){
                 setTimeout(exec,durationStep);
