@@ -31,7 +31,7 @@ var JsAnimScroll = /** @class */ (function () {
             elementToScroll.scrollTo(0, y);
         }
     };
-    JsAnimScroll.prototype.cubic_bezier = function (bx, by, cx, cy, dt) {
+    JsAnimScroll.prototype.cubic_bezier_array = function (bx, by, cx, cy, dt) {
         if (dt === void 0) { dt = 0.01; }
         var result = [];
         for (var t = 0; t <= (1 + dt); t += dt) {
@@ -80,6 +80,13 @@ var JsAnimScroll = /** @class */ (function () {
         if (durationStep === void 0) { durationStep = this.globalDurationStep(); }
         var parent = this;
         var bezierPoints = parent.cubic_bezier(0.455, 0.03, 0.515, 0.955);
+        parent.exec(elementToScroll, bezierPoints, 0, durationStep, scrollDuration, (scrollTo - parent.getScrollFrom(elementToScroll)), parent.getScrollFrom(elementToScroll));
+    };
+    JsAnimScroll.prototype.cubic_bezier = function (px1, py1, px2, py2, elementToScroll, scrollTo, scrollDuration, durationStep) {
+        if (scrollDuration === void 0) { scrollDuration = this.globalScrollDuration(); }
+        if (durationStep === void 0) { durationStep = this.globalDurationStep(); }
+        var parent = this;
+        var bezierPoints = parent.cubic_bezier(px1, py1, px2, py2);
         parent.exec(elementToScroll, bezierPoints, 0, durationStep, scrollDuration, (scrollTo - parent.getScrollFrom(elementToScroll)), parent.getScrollFrom(elementToScroll));
     };
     return JsAnimScroll;

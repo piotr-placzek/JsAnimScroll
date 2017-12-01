@@ -32,7 +32,7 @@ class JsAnimScroll{
             elementToScroll.scrollTo(0,y);
         }
     }
-	private cubic_bezier(bx: number, by: number, cx: number, cy: number, dt: number = 0.01){
+	private cubic_bezier_array(bx: number, by: number, cx: number, cy: number, dt: number = 0.01){
         let result = [];	
         for (let t = 0; t <= (1+dt); t += dt) {
             let x = 3*bx*t*(1-2*t+t*t)+3*cx*t*t*(1-t)+t*t*t;
@@ -76,6 +76,11 @@ class JsAnimScroll{
     public easeInOutQuad(elementToScroll: any, scrollTo: number, scrollDuration: number = this.globalScrollDuration(), durationStep: number = this.globalDurationStep()): void{
 		let parent: any = this;
         let bezierPoints = parent.cubic_bezier(0.455,0.03,0.515,0.955);
+        parent.exec(elementToScroll, bezierPoints, 0, durationStep, scrollDuration, (scrollTo - parent.getScrollFrom(elementToScroll)), parent.getScrollFrom(elementToScroll));
+    }
+    public cubic_bezier(px1: number, py1: number, px2: number, py2: number, elementToScroll: any, scrollTo: number, scrollDuration: number = this.globalScrollDuration(), durationStep: number = this.globalDurationStep()): void{
+		let parent: any = this;
+        let bezierPoints = parent.cubic_bezier(px1, py1, px2, py2);
         parent.exec(elementToScroll, bezierPoints, 0, durationStep, scrollDuration, (scrollTo - parent.getScrollFrom(elementToScroll)), parent.getScrollFrom(elementToScroll));
     }
 }
