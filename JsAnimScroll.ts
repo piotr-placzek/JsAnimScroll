@@ -32,7 +32,7 @@ class JsAnimScroll{
             elementToScroll.scrollTo(0,y);
         }
     }
-	private cubic_bezier(bx: number, by: number, cx: number, cy: number, dt: number = 0.01){
+	private cubic_bezier_array(bx: number, by: number, cx: number, cy: number, dt: number = 0.01){
         let result = [];	
         for (let t = 0; t <= (1+dt); t += dt) {
             let x = 3*bx*t*(1-2*t+t*t)+3*cx*t*t*(1-t)+t*t*t;
@@ -65,8 +65,6 @@ class JsAnimScroll{
         let pixelsToScroll: number = scrollTo - scrollFrom;
         let dt = 0;
         let bezierPoints = parent.cubic_bezier(0,0,1,1);
-        console.log(bezierPoints);
-
         let exec = function(){
             dt += durationStep;
             let y = pixelsToScroll*parent.cubic_bezier_multiplicator(bezierPoints, dt,scrollDuration)+scrollFrom;
