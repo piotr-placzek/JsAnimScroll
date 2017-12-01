@@ -82,6 +82,13 @@ var JsAnimScroll = /** @class */ (function () {
         var bezierPoints = parent.cubic_bezier(0.455, 0.03, 0.515, 0.955);
         parent.exec(elementToScroll, bezierPoints, 0, durationStep, scrollDuration, (scrollTo - parent.getScrollFrom(elementToScroll)), parent.getScrollFrom(elementToScroll));
     };
+    JsAnimScroll.prototype.easeInOutBack = function (elementToScroll, scrollTo, scrollDuration, durationStep) {
+        if (scrollDuration === void 0) { scrollDuration = this.globalScrollDuration(); }
+        if (durationStep === void 0) { durationStep = this.globalDurationStep(); }
+        var parent = this;
+        var bezierPoints = parent.cubic_bezier(0.68, -0.55, 0.265, 1.55);
+        parent.exec(elementToScroll, bezierPoints, 0, durationStep, scrollDuration, (scrollTo - parent.getScrollFrom(elementToScroll)), parent.getScrollFrom(elementToScroll));
+    };
     JsAnimScroll.prototype.cubic_bezier = function (px1, py1, px2, py2, elementToScroll, scrollTo, scrollDuration, durationStep) {
         if (scrollDuration === void 0) { scrollDuration = this.globalScrollDuration(); }
         if (durationStep === void 0) { durationStep = this.globalDurationStep(); }

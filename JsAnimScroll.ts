@@ -78,6 +78,11 @@ class JsAnimScroll{
         let bezierPoints = parent.cubic_bezier(0.455,0.03,0.515,0.955);
         parent.exec(elementToScroll, bezierPoints, 0, durationStep, scrollDuration, (scrollTo - parent.getScrollFrom(elementToScroll)), parent.getScrollFrom(elementToScroll));
     }
+    public easeInOutBack(elementToScroll: any, scrollTo: number, scrollDuration: number = this.globalScrollDuration(), durationStep: number = this.globalDurationStep()): void{
+		let parent: any = this;
+        let bezierPoints = parent.cubic_bezier(0.68,-0.55,0.265,1.55);
+        parent.exec(elementToScroll, bezierPoints, 0, durationStep, scrollDuration, (scrollTo - parent.getScrollFrom(elementToScroll)), parent.getScrollFrom(elementToScroll));
+    }
     public cubic_bezier(px1: number, py1: number, px2: number, py2: number, elementToScroll: any, scrollTo: number, scrollDuration: number = this.globalScrollDuration(), durationStep: number = this.globalDurationStep()): void{
 		let parent: any = this;
         let bezierPoints = parent.cubic_bezier(px1, py1, px2, py2);
