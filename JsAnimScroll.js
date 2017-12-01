@@ -31,6 +31,29 @@ var JsAnimScroll = /** @class */ (function () {
             elementToScroll.scrollTo(0, y);
         }
     };
+    JsAnimScroll.prototype.cubic_bezier = function (B, C, dt) {
+        if (dt === void 0) { dt = 0.01; }
+        var result;
+        var _i = 0;
+        for (var _t = 0; _t <= 1; _t += dt) {
+            var _p = void 0;
+            _p.x = 0;
+            _p.y = 0;
+            _p.t = _t;
+            _p.dt = dt;
+            _p.z = 0;
+            result[_i] = _p;
+            _i++;
+        }
+        return result;
+    };
+    JsAnimScroll.prototype.cubic_bezier_multiplicator = function (points, ct, sd) {
+        return 0;
+    };
+    //	private cubic_bezier_multiplier(B: number, C: number, ct: number, dt: number): number{
+    //		const t = ct/dt;
+    //		return 3*B*t*(1-2*t+t*t)+3*C*t*t*(1-t)+t*t*t;
+    //	}
     JsAnimScroll.prototype.linear = function (elementToScroll, scrollTo, scrollDuration, durationStep) {
         if (scrollDuration === void 0) { scrollDuration = this.globalScrollDuration(); }
         if (durationStep === void 0) { durationStep = this.globalDurationStep(); }
@@ -43,7 +66,8 @@ var JsAnimScroll = /** @class */ (function () {
         };
         var exec = function () {
             dt += durationStep;
-            var y = calc(dt, scrollFrom, pixelsToScroll, scrollDuration);
+            //            let y = calc(dt, scrollFrom, pixelsToScroll, scrollDuration);
+            var y = pixelsToScroll * parent.cubic_bezier_multiplier(0, 1, dt, scrollDuration) + scrollFrom;
             parent.setScrollPos(elementToScroll, y);
             if (dt < scrollDuration) {
                 setTimeout(exec, durationStep);
@@ -54,6 +78,8 @@ var JsAnimScroll = /** @class */ (function () {
     JsAnimScroll.prototype.easeInOutQuad = function (elementToScroll, scrollTo, scrollDuration, durationStep) {
         if (scrollDuration === void 0) { scrollDuration = this.globalScrollDuration(); }
         if (durationStep === void 0) { durationStep = this.globalDurationStep(); }
+        //		cubic-bezier(0.455, 0.03, 0.515, 0.955);	easeInOutQuad
+        //		cubic-bezier(0.68, -0.55, 0.265, 1.55);		easeInOutBack
         var parent = this;
         var scrollFrom = parent.getScrollFrom(elementToScroll);
         var pixelsToScroll = scrollTo - scrollFrom;
