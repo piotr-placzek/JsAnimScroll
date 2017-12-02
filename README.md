@@ -17,3 +17,6 @@ and I checked this:
 - http://easings.net/pl 
 
 and I wrote own cubic bezier methods.
+
+Example of use in html file:
+>function onClickFunction(){ jsAnimScroll.linear(window, 1750, 3000); }
